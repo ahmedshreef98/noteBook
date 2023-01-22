@@ -17,4 +17,4 @@ app.get('/', (req, res) => {
 dbConnection()
 
 
-app.listen(port, () => console.log(`App Running On Port ${process.env.PORT}`))
+app.listen(port, () => console.log(`App now Running On Port ${process.env.PORT}`))
