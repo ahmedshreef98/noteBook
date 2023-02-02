@@ -29,20 +29,17 @@ module.exports.signin = async (req, res) => {
 
     const { email, password } = req.body
     let user = await UserModel.findOne({ email })
-    console.log(user.password, "sssssssssss ", password);
 
     if (user) {
 
         const match = await bcrypt.compare(password, user.password)
+
         if (match) {
-            console.log(match);
-            console.log(user);
-            console.log(process.env.tokenSignature);
             const token = jwt.sign({ _id: user._id, name: user.name, isLoggIn: true },
                 process.env.tokenSignature, { expiresIn: 60 * 60 * 12 })
             res.json({ mesage: "DONE Login ", token })
         } else {
-            res.json({ message: "Incorrect pass " })
+            res.json({ message: "Incorrect password " })
         }
     } else {
         res.json({ message: "Email Don't exist " })

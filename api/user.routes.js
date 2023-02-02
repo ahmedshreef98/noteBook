@@ -1,18 +1,15 @@
 const { signup, signin, profile } = require('../services/user.services')
-const { signupValidation } = require('../validation/signup.validation')
 const { auth } = require('../middlewear/auth')
+const validation = require('../middlewear/validation')
+const { signupValidator, signinValidator } = require('../validation/user.validation')
+const { endPoint } = require('../endPoint/user.endPoint')
+
 const router = require('express').Router()
 
-router.post('/signup', signupValidation, signup)
-router.post('/signin', signin)
-router.get('/profile', auth(), profile)
+router.post('/signup', validation(signupValidator), signup)
+router.post('/signin', validation(signinValidator), signin)
+router.get('/profile', auth(endPoint.profile), profile)
 
-
-// router.route('/')
-//     .post('/', createUser)
-//     .get('/', getUsers)
-//     .put('/', updateUser)
-//     .delete('/', deleteUser)
 
 
 module.exports = router

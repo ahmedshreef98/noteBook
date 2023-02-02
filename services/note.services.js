@@ -3,17 +3,17 @@ const NoteModel = require("../models/note.model")
 
 module.exports.addNote = async (req, res) => {
     const { title, desc } = req.body
-    await NoteModel.insertMany({ title, desc, userId: req.user._id })
-    res.json({ message: "Success Adding Note " })
+    const note = await NoteModel.insertMany({ title, desc, userId: req.user._id })
+    res.json({ message: "Success Adding Note", note })
 
 
 }
 
 
 module.exports.updateNote = async (req, res) => {
-    const { noteId, title, desc } = req.body
-    await NoteModel.updateOne({ _id: noteId }, { title, desc })
-    res.json({ message: "Success Updating Note " })
+    const { title, desc } = req.body
+    const note = await NoteModel.updateOne({ _id: req.params.id, userId: req.user._id }, { title, desc }, { new: true })
+    res.json({ message: "Success Updating Note ", note })
 
 }
 
@@ -22,7 +22,7 @@ module.exports.updateNote = async (req, res) => {
 module.exports.deleteNote = async (req, res) => {
     const { noteId } = req.body
     await NoteModel.deleteOne({ noteId })
-    res.json({ message: "Success Delet ing Note " })
+    res.json({ message: "Success Deleting Note " })
 
 
 }
@@ -35,7 +35,7 @@ module.exports.getNotes = async (req, res) => {
     let PAGE_LIMIT = 5
     let Skip = (page - 1) * PAGE_LIMIT
     let data = await NoteModel.find().skip(Skip).limit(PAGE_LIMIT)
-    // .populate('userId', 'name ')
+
     res.json({ data })
 
 }
